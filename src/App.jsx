@@ -93,6 +93,7 @@ const tabs = [
   { id: "funnel1", label: "Funnel 1: Ro (239 kr.)", color: COLORS.accent },
   { id: "funnel2", label: "Funnel 2: Masterclass (4.999 kr.)", color: COLORS.purple },
   { id: "funnel3", label: "Funnel 3: Ascendering", color: COLORS.orange },
+  { id: "contacts", label: "Kontakter (2.981)", color: COLORS.yellow },
   { id: "money", label: "Money Model", color: COLORS.green },
 ];
 
@@ -146,12 +147,12 @@ const Funnel2 = () => (
   <div>
     <Section title="Funnel 2 — Masterclass → Smertefri Metoden (4.999 kr.)" color={COLORS.purple}>
       <div style={{ display: "flex", gap: 24, marginBottom: 20, flexWrap: "wrap" }}>
+        <KPI label="Masterclass signups" value="2.334" sub="total i GHL" />
+        <KPI label="Aldrig købt" value="2.150" sub="92% af signups" color={COLORS.red} />
+        <KPI label="Har købt noget" value="184" sub="7,9% konv.rate" color={COLORS.green} />
         <KPI label="Leadpris (karrusel)" value="7-9 kr" color={COLORS.green} />
-        <KPI label="Konv. rate" value="0,87%" sub="lead → salg" />
-        <KPI label="Cost/salg" value="~920 kr" color={COLORS.green} />
         <KPI label="Produkt" value="4.999 kr" />
-        <KPI label="ROAS (beregnet)" value="5,4x" color={COLORS.green} />
-        <KPI label="Salg total" value="13" />
+        <KPI label="Rejse-salg total" value="13" />
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
@@ -224,8 +225,10 @@ const Funnel3 = () => (
   <div>
     <Section title="Funnel 3 — Ascendering af eksisterende købere" color={COLORS.orange}>
       <div style={{ display: "flex", gap: 24, marginBottom: 20, flexWrap: "wrap" }}>
+        <KPI label="Total kontakter" value="2.981" />
+        <KPI label="Aldrig købt" value="2.477" sub="83% af alle" color={COLORS.red} />
         <KPI label="Betalende kunder" value="504" />
-        <KPI label="Aldrig ascenderet" value="80%" color={COLORS.red} />
+        <KPI label="Aldrig ascenderet" value="80%" sub="af købere" color={COLORS.red} />
         <KPI label="Tabt potentiale" value="335.000+" sub="DKK (estimat)" color={COLORS.red} />
       </div>
 
@@ -292,19 +295,115 @@ const Funnel3 = () => (
   </div>
 );
 
+const Contacts = () => (
+  <div>
+    <Section title="Kontakter — Fuld pipeline-analyse (2.981 kontakter fra GHL)" color={COLORS.yellow}>
+      <div style={{ display: "flex", gap: 24, marginBottom: 20, flexWrap: "wrap" }}>
+        <KPI label="Total kontakter" value="2.981" />
+        <KPI label="Aldrig købt" value="2.477" sub="83,1%" color={COLORS.red} />
+        <KPI label="Købere" value="504" sub="16,9%" color={COLORS.green} />
+        <KPI label="Masterclass leads" value="2.334" />
+        <KPI label="MC konv.rate" value="7,9%" sub="184 købte" color={COLORS.yellow} />
+      </div>
+
+      {/* Funnel visualization */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "center", marginBottom: 24 }}>
+        {[
+          { label: "Total kontakter i GHL", value: 2981, width: 100, color: COLORS.muted },
+          { label: "Masterclass leads (tilmeldt, aldrig købt)", value: 2150, width: 85, color: COLORS.yellow },
+          { label: "Freebie + QnA leads (aldrig købt)", value: 345, width: 40, color: COLORS.orange },
+          { label: "Købt kun Ro i nervesystemet", value: 418, width: 35, color: COLORS.accent },
+          { label: "Købt Smertefri Start (± Ro)", value: 74, width: 18, color: COLORS.orange },
+          { label: "Købt Smertefri Rejse", value: 12, width: 10, color: COLORS.purple },
+        ].map((step, i) => (
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, width: "100%" }}>
+            <div style={{
+              width: `${step.width}%`, minWidth: 120, background: `${step.color}22`,
+              border: `1px solid ${step.color}44`, borderRadius: 8, padding: "10px 16px",
+              display: "flex", justifyContent: "space-between", alignItems: "center",
+              marginLeft: `${(100 - step.width) / 2}%`
+            }}>
+              <span style={{ fontSize: 12, color: COLORS.text }}>{step.label}</span>
+              <span style={{ fontSize: 16, fontWeight: 700, color: step.color, fontFamily: "'JetBrains Mono', monospace" }}>{step.value.toLocaleString('da-DK')}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Segment detail */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+        <div style={{ background: COLORS.card, borderRadius: 10, padding: 16, border: `1px solid ${COLORS.yellow}33` }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: COLORS.yellow, marginBottom: 10 }}>2.150 Masterclass leads (aldrig købt)</div>
+          <div style={{ fontSize: 11, color: COLORS.muted, marginBottom: 8 }}>Signup per måned:</div>
+          {[
+            { m: "Maj 25", n: 149 }, { m: "Jun 25", n: 213 }, { m: "Jul 25", n: 44 },
+            { m: "Aug 25", n: 30 }, { m: "Sep 25", n: 202 }, { m: "Okt 25", n: 72 },
+            { m: "Nov 25", n: 9 }, { m: "Dec 25", n: 483 }, { m: "Jan 26", n: 777 },
+            { m: "Feb 26", n: 157 },
+          ].map((d, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
+              <span style={{ fontSize: 10, color: COLORS.muted, width: 48 }}>{d.m}</span>
+              <div style={{ height: 10, borderRadius: 4, background: `${COLORS.yellow}44`, width: `${(d.n / 777) * 100}%`, minWidth: 2 }} />
+              <span style={{ fontSize: 10, fontWeight: 600, color: COLORS.yellow, fontFamily: "'JetBrains Mono', monospace" }}>{d.n}</span>
+            </div>
+          ))}
+          <div style={{ marginTop: 10, fontSize: 11, color: COLORS.text }}>
+            <strong style={{ color: COLORS.green }}>1.260 leads</strong> fra dec 25 + jan 26 — relativt friske og modtagelige for opfølgning.
+          </div>
+        </div>
+
+        <div style={{ background: COLORS.card, borderRadius: 10, padding: 16, border: `1px solid ${COLORS.border}` }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: COLORS.text, marginBottom: 10 }}>Øvrige segmenter</div>
+          {[
+            { label: "QnA-kampagne leads (aldrig købt)", n: 193, color: COLORS.orange },
+            { label: "Freebie leads (aldrig købt)", n: 152, color: COLORS.orange },
+            { label: "QnA leads der HAR købt", n: 270, color: COLORS.green },
+            { label: "Nyhedsbrev (total)", n: 2909, color: COLORS.muted },
+          ].map((s, i) => (
+            <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: `1px solid ${COLORS.border}`, fontSize: 12 }}>
+              <span style={{ color: COLORS.muted }}>{s.label}</span>
+              <span style={{ fontWeight: 600, color: s.color, fontFamily: "'JetBrains Mono', monospace" }}>{s.n}</span>
+            </div>
+          ))}
+          <div style={{ marginTop: 12, fontSize: 11, color: COLORS.muted }}>
+            Tags i GHL: tilføj_nyhedsbrev (2.909) · masterclass smertefrirejse (2.334) · qna-kampagne (937) · købt ro (487) · freebie (372) · købt_smertefri_start (49) · købt_smertefri_rejse (10)
+          </div>
+        </div>
+      </div>
+
+      {/* Key insight */}
+      <div style={{ padding: 14, background: COLORS.redBg, borderRadius: 8, border: `1px solid ${COLORS.red}33`, fontSize: 12, color: COLORS.red, marginBottom: 12 }}>
+        🔴 <strong>2.477 mennesker har rakt hånden op og sagt "jeg har kroniske smerter" — men aldrig købt.</strong> Det er ikke et trafik-problem. Det er et konverterings-problem. En email-sekvens med Value Bombs til de 2.150 masterclass-leads kunne realistisk konvertere 2-5% ekstra = 40-100 nye kunder uden én ekstra annoncekrone.
+      </div>
+
+      <div style={{ padding: 14, background: COLORS.greenBg, borderRadius: 8, border: `1px solid ${COLORS.green}33`, fontSize: 12 }}>
+        <div style={{ fontWeight: 700, color: COLORS.green, marginBottom: 6 }}>📋 Prioriterede email-sekvenser</div>
+        <div style={{ color: COLORS.text, lineHeight: 1.8 }}>
+          <strong style={{ color: COLORS.yellow }}>1. Masterclass-leads (2.150):</strong> Value Bomb-sekvens → pitch Ro i nervesystemet (239 kr.) som entry → tripwire til Start<br/>
+          <strong style={{ color: COLORS.accent }}>2. Ro-købere (418):</strong> Nurture + Awareness Bridge → pitch Smertefri Start (1.299 kr.) → pitch Rejse (4.999 kr.)<br/>
+          <strong style={{ color: COLORS.orange }}>3. Start-købere (74):</strong> Case studies + social proof → pitch Smertefri Rejse (4.999 kr.)<br/>
+          <strong style={{ color: COLORS.purple }}>4. Genaktivering:</strong> Kolde leads (signup > 90 dage, ingen aktivitet) → "Er du stadig der?"-kampagne
+        </div>
+      </div>
+    </Section>
+  </div>
+);
+
 const MoneyModel = () => (
   <div>
     <Section title="Samlet Money Model — Værditrappe" color={COLORS.green}>
       <div style={{ display: "flex", gap: 24, marginBottom: 20, flexWrap: "wrap" }}>
+        <KPI label="Total kontakter" value="2.981" sub="i GHL" />
         <KPI label="Total omsætning" value="210.402" sub="DKK (maj 25 – feb 26)" />
         <KPI label="Total ads spend" value="85.474" sub="DKK" />
         <KPI label="Profit" value="124.928" sub="DKK" color={COLORS.green} />
         <KPI label="ROAS" value="2,5x" color={COLORS.yellow} />
+        <KPI label="Aldrig købt" value="83%" sub="2.477 leads" color={COLORS.red} />
       </div>
 
       <div style={{ display: "flex", alignItems: "stretch", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
         {[
-          { title: "Gratis", items: ["Øvelse (email)", "Masterclass (email)"], color: COLORS.muted, type: "LEAD MAGNET", revenue: "0 kr", n: "1.400+ leads", status: "✅" },
+          { title: "Gratis", items: ["Øvelse (email)", "Masterclass (email)"], color: COLORS.muted, type: "LEAD MAGNET", revenue: "0 kr", n: "2.477 leads (aldrig købt)", status: "✅" },
           { title: "239 kr", items: ["Ro i nervesystemet"], color: COLORS.accent, type: "ATTRACTION", revenue: "108.188 kr", n: "509 salg", status: "✅" },
           { title: "549–1.299 kr", items: ["Smertefri Start"], color: COLORS.orange, type: "MID-TICKET", revenue: "56.855 kr", n: "95 salg", status: "✅" },
           { title: "4.999 kr", items: ["Smertefri Metoden/Rejse"], color: COLORS.purple, type: "SIGNATURKURSUS", revenue: "55.086 kr", n: "13 salg", status: "✅" },
@@ -347,9 +446,11 @@ const MoneyModel = () => (
             • Profitabel fra måned 2 (kun maj gik i minus)<br/>
             • Leadpriser ekstremt lave (7-10 kr.)<br/>
             • Stærk origin story + autentisk ekspert<br/>
+            • 2.981 kontakter i GHL (2.477 ukonverterede leads)<br/>
             • 504 betalende kunder i universet<br/>
             • Produkt der virker (testimonials, resultater)<br/>
-            • Stigende AOV over tid (149 → 954 kr.)
+            • Stigende AOV over tid (149 → 954 kr.)<br/>
+            • Masterclass konv.rate 7,9% (184 af 2.334)
           </div>
         </div>
       </div>
@@ -358,9 +459,9 @@ const MoneyModel = () => (
         <div style={{ fontWeight: 700, color: COLORS.purple, marginBottom: 6 }}>📋 Prioriteret handlingsplan</div>
         <div style={{ color: COLORS.text, lineHeight: 1.8 }}>
           <strong style={{ color: COLORS.green }}>NU:</strong> Masterclass-kampagne kører (2 karruseller, 130 kr/dag) · Afklar markedsføringslov (video-annoncer)<br/>
-          <strong style={{ color: COLORS.yellow }}>UGE 1-2:</strong> Email-sekvens til 405 Ro-købere · Overvej webinar-split i kortere videoer<br/>
+          <strong style={{ color: COLORS.yellow }}>UGE 1-2:</strong> Email Value Bomb-sekvens til 2.150 masterclass-leads · Email-sekvens til 418 Ro-købere · Overvej webinar-split i kortere videoer<br/>
           <strong style={{ color: COLORS.orange }}>EFTER REJSE:</strong> Avatar-arbejde · Grand Slam Offer-redesign (5.000/8.000/15.000 kr.) · Order bumps + upsells · Continuity-struktur<br/>
-          <strong style={{ color: COLORS.purple }}>SKALERING:</strong> Core 4 annoncer til alle faser · Retargeting · Horisontal skalering
+          <strong style={{ color: COLORS.purple }}>SKALERING:</strong> Core 4 annoncer til alle faser · Retargeting · Horisontal skalering · Genaktivering af kolde leads
         </div>
       </div>
     </Section>
@@ -399,6 +500,7 @@ export default function FunnelDashboard() {
       {active === "funnel1" && <Funnel1 />}
       {active === "funnel2" && <Funnel2 />}
       {active === "funnel3" && <Funnel3 />}
+      {active === "contacts" && <Contacts />}
       {active === "money" && <MoneyModel />}
     </div>
   );
